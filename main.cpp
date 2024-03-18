@@ -62,6 +62,20 @@ void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    glBegin(GL_LINES);
+        glColor3f(1.0, 0.0, 0.0);
+        glVertex3f(0.0, 0.0, 0.0);
+        glVertex3f(1000.0, 0.0, 0.0);
+
+        glColor3f(0.0, 1.0, 0.0);
+        glVertex3f(0.0, 0.0, 0.0);
+        glVertex3f(0.0, 1000.0, 0.0);
+
+        glColor3f(0.0, 0.0, 1.0);
+        glVertex3f(0.0, 0.0, 0.0);
+        glVertex3f(0.0, 0.0, 1000.0);
+    glEnd();
+
     glColor3f(1.0, 1.0, 1.0);
 
     glBegin(GL_POLYGON);
