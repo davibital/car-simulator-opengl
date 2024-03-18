@@ -9,6 +9,7 @@ using namespace std;
 
 vector<vector<int>> terrainMatrix;
 int terrainWidth, terrainLength;
+int maxTerrainHeight;
 
 void init();
 void display();
@@ -16,7 +17,6 @@ void reshape(int w, int h);
 
 void initTerrain();
 
-// TODO: Implementar função para desenhar a malha do terreno
 void drawTerrainMesh();
 
 int main(int argc, char **argv)
@@ -52,7 +52,7 @@ void init()
 
     gluPerspective(60.0, 1.0, 0.5, 100.0);
 
-    gluLookAt(terrainWidth * 1.75, terrainLength * 1.75, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+    gluLookAt(-terrainWidth, -terrainLength, maxTerrainHeight * 1.2, terrainWidth, terrainLength, 0.0, 0.0, 0.0, 1.0);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -76,14 +76,7 @@ void display()
         glVertex3f(0.0, 0.0, 1000.0);
     glEnd();
 
-    glColor3f(1.0, 1.0, 1.0);
-
-    glBegin(GL_POLYGON);
-        glVertex3f(0.0, 0.0, 0.0);
-        glVertex3f(0.0, terrainLength, 0.0);
-        glVertex3f(terrainWidth, terrainLength, 0.0);
-        glVertex3f(terrainWidth, 0.0, 0.0);
-    glEnd();
+    drawTerrainMesh();
 
     glutSwapBuffers();
 }
@@ -98,4 +91,51 @@ void initTerrain()
     terrainWidth = getTerrainWidth();
     terrainLength = getTerrainLength();
     terrainMatrix = getTerrainMatrix();
+
+    maxTerrainHeight = getMaxHeight();
+}
+
+void drawTerrainMesh()
+{
+    float r = 0.5, g = 0.2, b = 0.7;
+    for (int i = 0; i < terrainLength; i++)
+    {
+        for (int j = 0; j < terrainWidth; j++)
+        {
+            if (r > 1)
+                r = r - 1;
+            if (g > 1)
+                g = g - 1;
+            if (b > 1)
+                b = b - 1;
+
+            if (i + 1 < terrainLength && j + 1 < terrainWidth)
+            {
+                glColor3f(r, g, b);
+                glBegin(GL_TRIANGLES);
+                    glVertex3f(j, i, terrainMatrix[i][j]);
+                    glVertex3f(j, i + 1, terrainMatrix[i + 1][j]);
+                    glVertex3f(j + 1, i, terrainMatrix[i][j + 1]);
+                glEnd();
+            }
+
+            r += 0.1;
+            g += 0.2;
+            b += 0.3;
+
+            if (i - 1 >= 0 && j - 1 >= 0)
+            {
+                glColor3f(r, g, b);
+                glBegin(GL_TRIANGLES);
+                    glVertex3f(j, i, terrainMatrix[i][j]);
+                    glVertex3f(j, i - 1, terrainMatrix[i - 1][j]);
+                    glVertex3f(j - 1, i, terrainMatrix[i][j - 1]);
+                glEnd();
+            }
+
+            r += 0.1;
+            g += 0.2;
+            b += 0.3;
+        }
+    }
 }
