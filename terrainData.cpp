@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int width, length;
+int width, length, maxHeight = 0;
 vector<vector<int>> matrix;
 
 int getTerrainWidth()
@@ -17,6 +17,11 @@ int getTerrainWidth()
 int getTerrainLength()
 {
     return length;
+}
+
+int getMaxHeight()
+{
+    return maxHeight;
 }
 
 vector<vector<int>> getTerrainMatrix()
@@ -70,7 +75,14 @@ void readPPMFile(string fileName)
 
                 while(getline(stringSeparator, line, ' '))
                 {
-                    matrix[j][i] = stoi(line);
+                    int value = stoi(line);
+                    
+                    if (value > maxHeight)
+                    {
+                        maxHeight = value;
+                    }
+
+                    matrix[j][i] = value;
                     i++;
                 }
             }
