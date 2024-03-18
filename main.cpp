@@ -8,7 +8,7 @@
 using namespace std;
 
 vector<vector<int>> terrainMatrix;
-int terrainWidth, terrainHeight;
+int terrainWidth, terrainLength;
 
 void init();
 void display();
@@ -52,7 +52,7 @@ void init()
 
     gluPerspective(60.0, 1.0, 0.5, 100.0);
 
-    gluLookAt(terrainWidth * 1.75, terrainHeight * 1.75, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+    gluLookAt(terrainWidth * 1.75, terrainLength * 1.75, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -80,8 +80,8 @@ void display()
 
     glBegin(GL_POLYGON);
         glVertex3f(0.0, 0.0, 0.0);
-        glVertex3f(0.0, terrainHeight, 0.0);
-        glVertex3f(terrainWidth, terrainHeight, 0.0);
+        glVertex3f(0.0, terrainLength, 0.0);
+        glVertex3f(terrainWidth, terrainLength, 0.0);
         glVertex3f(terrainWidth, 0.0, 0.0);
     glEnd();
 
@@ -96,6 +96,6 @@ void reshape(int w, int h)
 void initTerrain()
 {
     terrainWidth = getTerrainWidth();
-    terrainHeight = getTerrainLength();
+    terrainLength = getTerrainLength();
     terrainMatrix = getTerrainMatrix();
 }
