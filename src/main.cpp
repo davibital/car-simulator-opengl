@@ -4,15 +4,12 @@
 #include <stdio.h>
 
 #include "terrain/terrainData.cpp"
-#include "../headers/Camera.hpp"
 
 using namespace std;
 
 vector<vector<int>> terrainMatrix;
 int terrainWidth, terrainLength;
 int maxTerrainHeight;
-
-Camera camera;
 
 void init();
 void display();
