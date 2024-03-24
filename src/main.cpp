@@ -3,13 +3,16 @@
 #include <GL/freeglut.h>
 #include <stdio.h>
 
-#include "terrainData.cpp"
+#include "terrain/terrainData.cpp"
+#include "../headers/Camera.hpp"
 
 using namespace std;
 
 vector<vector<int>> terrainMatrix;
 int terrainWidth, terrainLength;
 int maxTerrainHeight;
+
+Camera camera;
 
 void init();
 void display();
