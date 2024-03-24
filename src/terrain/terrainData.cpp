@@ -6,30 +6,30 @@
 
 using namespace std;
 
-int width, length, maxHeight = 0;
-vector<vector<int>> matrix;
+static int width, length, maxHeight = 0;
+static vector<vector<int>> matrix;
 
-int getTerrainWidth()
+static int getTerrainWidth()
 {
     return width;
 }
 
-int getTerrainLength()
+static int getTerrainLength()
 {
     return length;
 }
 
-int getMaxHeight()
+static int getMaxHeight()
 {
     return maxHeight;
 }
 
-vector<vector<int>> getTerrainMatrix()
+static vector<vector<int>> getTerrainMatrix()
 {
     return matrix;
 }
 
-void readPPMFile(string fileName)
+static void readPPMFile(string fileName)
 {
     ifstream ppmFile(fileName);
 
