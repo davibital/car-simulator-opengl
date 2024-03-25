@@ -4,7 +4,19 @@
 #include <iostream>
 Vector3D::Vector3D() : x(0), y(0), z(0) {}
 
-Vector3D::Vector3D(float x, float y, float z) : x(x), y(y), z(z) {}
+Vector3D::Vector3D(float x, float y, float z) : x(x), y(y), z(z) {
+    fixVectorNearZero(*this);
+}
+
+void Vector3D::fixVectorNearZero(Vector3D &v)
+{
+    if (fabs(v.x) < epsilon)
+        v.x = 0;
+    if (fabs(v.y) < epsilon)
+        v.y = 0;
+    if (fabs(v.z) < epsilon)
+        v.z = 0;
+}
 
 Vector3D Vector3D::operator+(Vector3D v)
 {

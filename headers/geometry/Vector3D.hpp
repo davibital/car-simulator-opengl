@@ -3,6 +3,11 @@
 
 class Vector3D
 {
+    private:
+        float epsilon = 1e-6;
+
+        void fixVectorNearZero(Vector3D &v);
+
     public:
         float x, y, z;
 
