@@ -4,12 +4,15 @@
 #include <stdio.h>
 
 #include "terrain/terrainData.cpp"
+#include "../headers/Camera.hpp"
 
 using namespace std;
 
 vector<vector<int>> terrainMatrix;
 int terrainWidth, terrainLength;
 int maxTerrainHeight;
+
+Camera camera;
 
 void init();
 void display();
@@ -50,17 +53,21 @@ void init()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    gluPerspective(60.0, 1.0, 0.5, 100.0);
+    gluPerspective(60.0, glutGet(GLUT_WINDOW_WIDTH) / glutGet(GLUT_WINDOW_HEIGHT), 0.5, 100.0);
 
-    gluLookAt(-terrainWidth, -terrainLength, maxTerrainHeight * 1.2, terrainWidth, terrainLength, 0.0, 0.0, 0.0, 1.0);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    camera.setPosition(terrainWidth, terrainLength, maxTerrainHeight * 1.2);
+    camera.setUpVector(0.0, 0.0, 0.1);
+    camera.setTarget(0, 0, 0);
 }
 
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    camera.update();
 
     glBegin(GL_LINES);
         glColor3f(1.0, 0.0, 0.0);
