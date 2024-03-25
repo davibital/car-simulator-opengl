@@ -38,6 +38,30 @@ void Camera::setTarget(float x, float y, float z)
     upVector.normalize();
 }
 
+void Camera::verticalRotation(int angle)
+{
+    Quaternion rotationQ = Quaternion(angle, sideVector);
+    rotationQ.normalize();
+
+    direction = rotationQ.rotate(direction);
+    direction.normalize();
+
+    upVector = rotationQ.rotate(upVector);
+    upVector.normalize();
+}
+
+void Camera::horizontalRotation(int angle)
+{
+    Quaternion rotationQ = Quaternion(angle, upVector);
+    rotationQ.normalize();
+
+    direction = rotationQ.rotate(direction);
+    direction.normalize();
+
+    sideVector = rotationQ.rotate(sideVector);
+    sideVector.normalize();
+}
+
 void Camera::update()
 {
     target = position + direction;

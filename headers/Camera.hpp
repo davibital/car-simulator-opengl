@@ -20,6 +20,10 @@ class Camera
 
         void setTarget(float x, float y, float z);
 
+        void verticalRotation(int angle);
+
+        void horizontalRotation(int angle);
+
         void update();
 };
 
