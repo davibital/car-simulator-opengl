@@ -16,6 +16,10 @@ class Point3D
 
         Point3D operator+(Vector3D v);
 
+        Point3D operator-(Point3D p);
+
+        Point3D operator-(Vector3D v);
+
         float distance(Point3D p);
 };
 
