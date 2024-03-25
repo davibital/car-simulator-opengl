@@ -21,6 +21,7 @@ void reshape(int w, int h);
 void initTerrain();
 
 void drawTerrainMesh();
+void rotateCamera(int key, int x, int y);
 
 int main(int argc, char **argv)
 {
@@ -36,6 +37,7 @@ int main(int argc, char **argv)
 
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+    glutSpecialFunc(rotateCamera);
 
     glutMainLoop();
 
@@ -145,4 +147,25 @@ void drawTerrainMesh()
             b += 0.3;
         }
     }
+}
+
+void rotateCamera(int key, int x, int y)
+{
+    switch (key)
+    {
+    case GLUT_KEY_UP:
+        camera.verticalRotation(3);
+        break;
+    case GLUT_KEY_DOWN:
+        camera.verticalRotation(-3);
+        break;
+    case GLUT_KEY_LEFT:
+        camera.horizontalRotation(3);
+        break;
+    case GLUT_KEY_RIGHT:
+        camera.horizontalRotation(-3);
+        break;
+    }
+
+    glutPostRedisplay();
 }
