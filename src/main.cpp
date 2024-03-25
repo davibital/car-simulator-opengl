@@ -22,6 +22,7 @@ void initTerrain();
 
 void drawTerrainMesh();
 void rotateCamera(int key, int x, int y);
+void cameraMovement(unsigned char key, int x, int y);
 
 int main(int argc, char **argv)
 {
@@ -38,6 +39,7 @@ int main(int argc, char **argv)
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutSpecialFunc(rotateCamera);
+    glutKeyboardFunc(cameraMovement);
 
     glutMainLoop();
 
@@ -164,6 +166,33 @@ void rotateCamera(int key, int x, int y)
         break;
     case GLUT_KEY_RIGHT:
         camera.horizontalRotation(-3);
+        break;
+    }
+
+    glutPostRedisplay();
+}
+
+void cameraMovement(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 'w':
+        camera.moveForward();
+        break;
+    case 's':
+        camera.moveBackward();
+        break;
+    case 'a':
+        camera.moveLeft();
+        break;
+    case 'd':
+        camera.moveRight();
+        break;
+    case ' ':
+        camera.moveUp();
+        break;
+    case 'z':
+        camera.moveDown();
         break;
     }
 

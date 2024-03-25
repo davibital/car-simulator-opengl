@@ -24,6 +24,18 @@ class Camera
 
         void horizontalRotation(int angle);
 
+        void moveUp();
+
+        void moveDown();
+
+        void moveForward();
+
+        void moveRight();
+
+        void moveLeft();
+
+        void moveBackward();
+
         void update();
 };
 

@@ -62,6 +62,36 @@ void Camera::horizontalRotation(int angle)
     sideVector.normalize();
 }
 
+void Camera::moveUp()
+{
+    position = position + upVector;
+}
+
+void Camera::moveDown()
+{
+    position = position - upVector;
+}
+
+void Camera::moveForward()
+{
+    position = position + direction;
+}
+
+void Camera::moveRight()
+{
+    position = position + sideVector;
+}
+
+void Camera::moveLeft()
+{
+    position = position - sideVector;
+}
+
+void Camera::moveBackward()
+{
+    position = position - direction;
+}
+
 void Camera::update()
 {
     target = position + direction;
