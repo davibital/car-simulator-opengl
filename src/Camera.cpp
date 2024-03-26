@@ -11,6 +11,17 @@ Camera::Camera()
     upVector = Vector3D(0, 0, 0);
     direction = Vector3D(0, 0, 0);
     sideVector = direction ^ upVector;
+    isThirdCarView = false;
+}
+
+void Camera::enableThirdCarView()
+{
+    isThirdCarView = true;
+}
+
+void Camera::disableThirdCarView()
+{
+    isThirdCarView = false;
 }
 
 void Camera::setPosition(float x, float y, float z)
@@ -92,9 +103,23 @@ void Camera::moveBackward()
     position = position - direction;
 }
 
+void Camera::thirdCarView(Car car)
+{
+    if (!isThirdCarView)
+        return;
+        
+    Quaternion rotationQ = Quaternion(45, car.sideVector);
+    rotationQ.normalize();
+
+    Vector3D viewVector = rotationQ.rotate(car.upVector);
+
+    position = car.position + (viewVector * 4);
+    target = car.position + (car.direction * 2);
+}
+
 void Camera::update()
 {
-    target = position + direction;
+    // target = position + direction;
 
     gluLookAt(position.x, position.y, position.z, target.x, target.y, target.z, upVector.x, upVector.y, upVector.z);
 }

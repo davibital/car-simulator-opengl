@@ -2,6 +2,7 @@
 #define CAMERA_HPP
 
 #include "./geometry.h"
+#include "./objects/Car.hpp"
 
 class Camera
 {
@@ -12,7 +13,13 @@ class Camera
         Vector3D direction;
         Vector3D sideVector;
 
+        bool isThirdCarView;
+
         Camera();
+
+        void enableThirdCarView();
+
+        void disableThirdCarView();
 
         void setPosition(float x, float y, float z);
 
@@ -35,6 +42,8 @@ class Camera
         void moveLeft();
 
         void moveBackward();
+
+        void thirdCarView(Car car);
 
         void update();
 };
