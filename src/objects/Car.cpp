@@ -48,14 +48,14 @@ void Car::moveBackward()
 
 void Car::moveRight()
 {
-    horizontalRotation(-90);
+    horizontalRotation(-20);
 
     moveFoward();
 }
 
 void Car::moveLeft()
 {
-    horizontalRotation(90);
+    horizontalRotation(20);
 
     moveFoward();
 }
