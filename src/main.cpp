@@ -23,8 +23,8 @@ void reshape(int w, int h);
 void initTerrain();
 
 void drawTerrainMesh();
-void rotateCamera(int key, int x, int y);
-void cameraMovement(unsigned char key, int x, int y);
+// void rotateCamera(int key, int x, int y);
+void carMovement(unsigned char key, int x, int y);
 
 int main(int argc, char **argv)
 {
@@ -40,8 +40,8 @@ int main(int argc, char **argv)
 
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
-    glutSpecialFunc(rotateCamera);
-    glutKeyboardFunc(cameraMovement);
+    // glutSpecialFunc(rotateCamera);
+    glutKeyboardFunc(carMovement);
 
     glutMainLoop();
 
@@ -69,6 +69,9 @@ void init()
     car.setPosition(1, 1, matrix[1][1] + 0.3);
     car.setUpVector(0, 0, 1);
     car.setDirection(0.707, 0.707, 0);
+
+    camera.enableThirdCarView();
+    camera.thirdCarView(car);
 }
 
 void display()
@@ -160,41 +163,88 @@ void drawTerrainMesh()
     }
 }
 
-void rotateCamera(int key, int x, int y)
-{
-    switch (key)
-    {
-    case GLUT_KEY_UP:
-        camera.verticalRotation(3);
-        break;
-    case GLUT_KEY_DOWN:
-        camera.verticalRotation(-3);
-        break;
-    case GLUT_KEY_LEFT:
-        camera.horizontalRotation(3);
-        break;
-    case GLUT_KEY_RIGHT:
-        camera.horizontalRotation(-3);
-        break;
-    }
+// void rotateCamera(int key, int x, int y)
+// {
+//     switch (key)
+//     {
+//     case GLUT_KEY_UP:
+//         camera.verticalRotation(3);
+//         break;
+//     case GLUT_KEY_DOWN:
+//         camera.verticalRotation(-3);
+//         break;
+//     case GLUT_KEY_LEFT:
+//         camera.horizontalRotation(3);
+//         break;
+//     case GLUT_KEY_RIGHT:
+//         camera.horizontalRotation(-3);
+//         break;
+//     case GLUT_KEY_F1:
+//         camera.enableThirdCarView();
+//         camera.thirdCarView(car);
+//         break;
+//     case GLUT_KEY_F2:
+//         camera.disableThirdCarView();
+//         break;
+//     }
 
-    glutPostRedisplay();
-}
+//     glutPostRedisplay();
+// }
 
-void cameraMovement(unsigned char key, int x, int y)
+void carMovement(unsigned char key, int x, int y)
 {
+    Point3D nextCarPosition;
+    Quaternion rotationQ;
+    Vector3D nextDirection;
+
     switch (key)
     {
     case 'w':
+        nextCarPosition = car.position + car.direction;
+
+        if (isOutOfBounds(nextCarPosition))
+            break;
+
+        car.moveFoward();
         camera.moveForward();
         break;
     case 's':
+        nextCarPosition = car.position - car.direction;
+
+        if (isOutOfBounds(nextCarPosition))
+            break;
+
+        car.moveBackward();
         camera.moveBackward();
         break;
     case 'a':
+        rotationQ = Quaternion(20, car.upVector);
+        rotationQ.normalize();
+
+        nextDirection = rotationQ.rotate(car.direction);
+        nextDirection.normalize();
+
+        nextCarPosition = car.position + nextDirection;
+
+        if (isOutOfBounds(nextCarPosition))
+            break;
+
+        car.moveLeft();
         camera.moveLeft();
         break;
     case 'd':
+        rotationQ = Quaternion(-20, car.upVector);
+        rotationQ.normalize();
+
+        nextDirection = rotationQ.rotate(car.direction);
+        nextDirection.normalize();
+
+        nextCarPosition = car.position + nextDirection;
+
+        if (isOutOfBounds(nextCarPosition))
+            break;
+
+        car.moveRight();
         camera.moveRight();
         break;
     case ' ':
@@ -203,6 +253,11 @@ void cameraMovement(unsigned char key, int x, int y)
     case 'z':
         camera.moveDown();
         break;
+    }
+
+    if (key == 'w' || key == 's' || key == 'a' || key == 'd')
+    {
+        camera.thirdCarView(car);
     }
 
     glutPostRedisplay();
