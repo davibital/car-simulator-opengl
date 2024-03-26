@@ -1,4 +1,4 @@
-#include "../headers/geometry/car.hpp"
+#include "../headers/objects/Car.hpp"
 #include <vector>
 #include <stdio.h>
 #include <string>
@@ -25,8 +25,8 @@ bool Car::is_number(const std::string& s)
 void Car::drawCar() {
     glPushMatrix(); // Salva a matriz atual, para as transformações não afetarem o resto da cena
     glTranslatef(this->position.x, this->position.y, this->position.z); // Move o carro para a posição 
-    glScalef(6,6,6); // Aumenta o tamanho do carro
-    
+    glRotatef(90, 1, 0, 0); // Rotaciona o carro para que ele fique de frente para a câmera
+
     // Primeiro for: percorre todas as faces do carro, desenhando cada face como um polígono
     for(int i = 0; i < this->faces.size(); i++){
         glBegin(GL_POLYGON); // Começa a desenhar um polígono
@@ -67,11 +67,11 @@ bool Car::loadObjCar(const char* filename) {
                     vs.push_back(currentLine);
                 }
             }
-            
+
             // since it's a 3D object, we only consider x, y, and z coordinates
             this->vertices.push_back(Point3D(stof(vs[0]),stof(vs[1]),stof(vs[2])));
 
-            
+
         }      
         // if the current line is start will vn, which means a vertex normal
         // List of vertex normals in (x,y,z) form; normals might not be unit vectors.
@@ -88,7 +88,7 @@ bool Car::loadObjCar(const char* filename) {
 
             this->normals.push_back(Vector3D(stof(vn[0]),stof(vn[1]),stof(vn[2])));
 
-            
+
         }
         // if the current line is start will vt, which means a texture coordinates
         else if(currentLine.substr(0,2) == "vt"){
@@ -139,6 +139,7 @@ bool Car::loadObjCar(const char* filename) {
                     std::string t;
                     while(std::getline(sub,t,'/')){
                         if(is_number(t)){
+                            cout << t << endl;
                             elements.push_back(t);
                         }
                     }
@@ -156,7 +157,7 @@ bool Car::loadObjCar(const char* filename) {
 
                     this->faces.push_back(face);
                 }
-            
+
 
             }
             else{
@@ -180,7 +181,7 @@ bool Car::loadObjCar(const char* filename) {
                     std::istringstream sub(faceElements[i]);
                     std::vector<std::string> elements;
                     std::string t;
-                    
+
                     while(std::getline(sub,t,'/')){
                         if(t != ""){
                             elements.push_back(t);

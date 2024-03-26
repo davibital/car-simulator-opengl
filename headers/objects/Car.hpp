@@ -1,6 +1,8 @@
+#ifndef CAR_HPP
+#define CAR_HPP
+
 #include <stdio.h>
-#include "Point3D.hpp"
-#include "Vector3D.hpp"
+#include "../geometry.h"
 #include <vector>
 #include <string>
 
@@ -22,3 +24,5 @@ public:
 
     bool is_number(const std::string& s);
 };
+
+#endif
