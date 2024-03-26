@@ -68,42 +68,43 @@ void Car::drawCar() {
 }
 
 bool Car::loadObjCar(const char* filename) {
-    //open a file
+    
     std::ifstream file(filename);
-    //determine the file whether or not exist
+    // vê se o arquivo existe
     if(!file){
         printf("Error! File does not exist.\n");
-        return false;//if not exist, return false
+        return false;
     }
-    // read file by lines
+    // Lê o arquivo linha por linha
     std::string currentLine;
     while(std::getline(file,currentLine)){
-        // List of geometric vertices, with (x, y, z [,w]) coordinates, w is optional and defaults to 1.0.
-        // if the current line is start will v, which means a vertex
+
+        // Lista dos vértices geométricos, com coordenadas (x, y, z [,w]), w é opcional e o padrão é 1.0.
+        // Se a linha começa com V, então é um vértice
         if(currentLine.substr(0,2) == "v "){
             std::istringstream ss(currentLine);
-            std::vector<std::string> vs;// stores the x,y,z coordinates
+            std::vector<std::string> vs;// guarda as coordenadas x, y, z
             std::string token;
 
-            for(std::string currentLine; ss >> currentLine; ){// substring is separated by space
+            for(std::string currentLine; ss >> currentLine; ){// as substrings são separadas por um espaço
                 if(currentLine != "v"){
                     vs.push_back(currentLine);
                 }
             }
-
-            // since it's a 3D object, we only consider x, y, and z coordinates
+            
+            // Como é um objeto 3D, adiciona um ponto 3D ao vetor de vértices
             this->vertices.push_back(Point3D(stof(vs[0]),stof(vs[1]),stof(vs[2])));
 
-
+            
         }      
-        // if the current line is start will vn, which means a vertex normal
-        // List of vertex normals in (x,y,z) form; normals might not be unit vectors.
+        // Se a linha começa com VN, então é uma normal
+        // Lista de normais dos vértices em forma (x, y, z);
         else if(currentLine.substr(0,2) == "vn"){
             std::istringstream ss(currentLine);
-            std::vector<std::string> vn;// stores the x,y,z values
+            std::vector<std::string> vn;// guarda os valores da normal: x, y, z
             std::string token;
 
-            for(std::string currentLine; ss >> currentLine; ){// substring is separated by space
+            for(std::string currentLine; ss >> currentLine; ){// as substrings são separadas por um espaço
                 if(currentLine != "vn"){
                     vn.push_back(currentLine);
                 }
@@ -111,12 +112,12 @@ bool Car::loadObjCar(const char* filename) {
 
             this->normals.push_back(Vector3D(stof(vn[0]),stof(vn[1]),stof(vn[2])));
 
-
+            
         }
-        // if the current line is start will vt, which means a texture coordinates
+        // Se a linha começa com VT, então é uma coordenada de textura
         else if(currentLine.substr(0,2) == "vt"){
             std::istringstream ss(currentLine);
-            std::vector<std::string> vt; // stores the values of texture coordinate
+            std::vector<std::string> vt; // guarda os valores das coordenadas de textura: u, v, w
             std::string token;
 
             for(std::string currentLine; ss >> currentLine; ){
@@ -124,7 +125,7 @@ bool Car::loadObjCar(const char* filename) {
                     vt.push_back(currentLine);
                 }
             }
-            //in (u, [,v ,w]) coordinates, these will vary between 0 and 1. v, w are optional and default to 0.
+            // Nas coordenadas (u, [,v ,w]), os valores variam entre 0 e 1. v, w são opcionais e o padrão é 0.
             if(vt.size() == 3){ 
                 this->vetor_textura.push_back(Point3D(stof(vt[0]),stof(vt[1]),stof(vt[2])));      
             }
@@ -135,17 +136,16 @@ bool Car::loadObjCar(const char* filename) {
                 this->vetor_textura.push_back(Point3D(stof(vt[0]),0.0,0.0));  
             }
         }
-        // if the current line is start will f, which means a face
-        // Different formats for a face
+        // Se a linha começa com f, então é uma face
+        // Há formatos diferentes para a face: 
         // f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3 ...
         // f v1//vn1 v2//vn2 v3//vn3 ...
         else if(currentLine.substr(0,2) == "f "){
-            if(currentLine.find("//") == std::string::npos){ // not the format of f v1//vn1 v2//vn2 v3//vn3 ...
+            if(currentLine.find("//") == std::string::npos){ // não é o formato f v1//vn1 v2//vn2 v3//vn3 ...
                 std::istringstream ss(currentLine);
                 std::vector<std::string> faceElements;
                 std::string token;
-
-                while(std::getline(ss, token, ' ')) {//get the token separated by space except "f", each token have the format 'v1/vt1/vn1'
+                while(std::getline(ss, token, ' ')) {// pega o token separado pelo espaço, exceto "f", cada token tem o formato 'v1/vt1/vn1'
                     if(token != "f"){
                         faceElements.push_back(token);
                     }
@@ -155,14 +155,13 @@ bool Car::loadObjCar(const char* filename) {
                 std::vector<int> v;
                 std::vector<int> tc;
                 std::vector<int> normal;
-                // for each 'v1/vt1/vn1', store v, vt and vn into different vectors
+                // para cada 'v1/vt1/vn1', armazena v, vt e vn em vetores diferentes
                 for(int i = 0; i < faceElements.size(); i++){
                     std::istringstream sub(faceElements[i]);
                     std::vector<std::string> elements;
                     std::string t;
                     while(std::getline(sub,t,'/')){
                         if(is_number(t)){
-                            cout << t << endl;
                             elements.push_back(t);
                         }
                     }
@@ -180,31 +179,31 @@ bool Car::loadObjCar(const char* filename) {
 
                     this->faces.push_back(face);
                 }
-
+            
 
             }
             else{
-                //similar to the previous format
-                //handle format of f v1//vn1 v2//vn2 v3//vn3 ...
+                // semelhante ao formato anterior
+                // cuida do formato f v1//vn1 v2//vn2 v3//vn3 ...
                 std::istringstream ss(currentLine);
                 std::vector<std::string> faceElements;
                 std::string token;
 
                 while(std::getline(ss, token, ' ')) {
                     if( token != "f"){
-                        faceElements.push_back(token);// each token have the format 'v1//vn1'
+                        faceElements.push_back(token);// cada token tem o formato 'v1//vn1'
                     }
                 }
 
                 std::vector<std::vector<int> > face;
                 std::vector<int> v;
                 std::vector<int> normal;
-                // for each 'v1//vn1', store v and vn into different vectors
+                // para cada 'v1//vn1', armazena v e vn em vetores diferentes
                 for(int i = 0; i < faceElements.size(); i++){
                     std::istringstream sub(faceElements[i]);
                     std::vector<std::string> elements;
                     std::string t;
-
+                    
                     while(std::getline(sub,t,'/')){
                         if(t != ""){
                             elements.push_back(t);
