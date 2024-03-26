@@ -1,4 +1,5 @@
 #include "../headers/objects/Car.hpp"
+#include "../headers/geometry/Quaternion.hpp"
 #include <vector>
 #include <stdio.h>
 #include <string>
@@ -33,6 +34,54 @@ void Car::setDirection(float x, float y, float z) {
     sideVector.normalize();
     upVector = sideVector ^ direction;
     upVector.normalize();
+}
+
+void Car::moveFoward()
+{
+    position = position + direction;
+}
+
+void Car::moveBackward()
+{
+    position = position - direction;
+}
+
+void Car::moveRight()
+{
+    horizontalRotation(-90);
+
+    moveFoward();
+}
+
+void Car::moveLeft()
+{
+    horizontalRotation(90);
+
+    moveFoward();
+}
+
+void Car::verticalRotation(int angle)
+{
+    Quaternion rotationQ = Quaternion(angle, sideVector);
+    rotationQ.normalize();
+
+    direction = rotationQ.rotate(direction);
+    direction.normalize();
+
+    upVector = rotationQ.rotate(upVector);
+    upVector.normalize();
+}
+
+void Car::horizontalRotation(int angle)
+{
+    Quaternion rotationQ = Quaternion(angle, upVector);
+    rotationQ.normalize();
+
+    direction = rotationQ.rotate(direction);
+    direction.normalize();
+
+    sideVector = rotationQ.rotate(sideVector);
+    sideVector.normalize();
 }
 
 void Car::drawCar() {

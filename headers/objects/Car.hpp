@@ -29,6 +29,18 @@ public:
 
     void setDirection(float x, float y, float z);
 
+    void moveFoward();
+
+    void moveBackward();
+
+    void moveRight();
+
+    void moveLeft();
+
+    void horizontalRotation(int angle);
+
+    void verticalRotation(int angle);
+
     void drawCar();
 
     bool loadObjCar(const char* filename);
