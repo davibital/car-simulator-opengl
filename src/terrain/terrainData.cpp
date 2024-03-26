@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include "../../headers/geometry/Point3D.hpp"
 
 using namespace std;
 
@@ -27,6 +28,11 @@ static int getMaxHeight()
 static vector<vector<int>> getTerrainMatrix()
 {
     return matrix;
+}
+
+static bool isOutOfBounds(Point3D point)
+{
+    return point.x < 0.5 || point.x >= (width - 1.5) || point.y < 0.5 || point.y >= (length - 1.5);
 }
 
 static void readPPMFile(string fileName)
