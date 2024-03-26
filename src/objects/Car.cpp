@@ -10,27 +10,50 @@
 #include <GL/glut.h>
 
 
-Car::Car(Point3D pos, Vector3D dir) : position(pos), direction(dir) {
-
+Car::Car() {
+    position = Point3D(0, 0, 0);
+    upVector = Vector3D(0, 0, 0);
+    direction = Vector3D(0, 0, 0);
+    sideVector = direction ^ upVector;
 }
 
-bool Car::is_number(const std::string& s)
-{
-    std::string::const_iterator it = s.begin();
-    while (it != s.end() && std::isdigit(*it)) ++it;
-    return !s.empty() && it == s.end();
+void Car::setPosition(float x, float y, float z) {
+    position = Point3D(x, y, z);
 }
 
+void Car::setUpVector(float x, float y, float z) {
+    upVector = Vector3D(x, y, z);
+    upVector.normalize();
+}
+
+void Car::setDirection(float x, float y, float z) {
+    direction = Vector3D(x, y, z);
+    direction.normalize();
+    sideVector = direction ^ upVector;
+    sideVector.normalize();
+    upVector = sideVector ^ direction;
+    upVector.normalize();
+}
 
 void Car::drawCar() {
     glPushMatrix(); // Salva a matriz atual, para as transformações não afetarem o resto da cena
-    glTranslatef(this->position.x, this->position.y, this->position.z); // Move o carro para a posição 
-    glRotatef(90, 1, 0, 0); // Rotaciona o carro para que ele fique de frente para a câmera
+    glTranslatef(this->position.x, this->position.y, this->position.z); // Move o carro para a posição
+
+    float orientation[16] = {
+        direction.x, direction.y, direction.z, 0,
+        upVector.x, upVector.y, upVector.z, 0,
+        sideVector.x, sideVector.y, sideVector.z, 0,
+        0, 0, 0, 1
+    };
+
+    glMultMatrixf(orientation);
+
+    glScalef(0.2, 0.2, 0.2); // Escala o carro (para que ele não fique muito grande na cena
 
     // Primeiro for: percorre todas as faces do carro, desenhando cada face como um polígono
     for(int i = 0; i < this->faces.size(); i++){
         glBegin(GL_POLYGON); // Começa a desenhar um polígono
-            glColor3f(1,0,1); // Define a cor do polígono 
+            glColor3f(1,1,1); // Define a cor do polígono 
 
             // Segundo for: percorre todos os vértices de uma face, definindo a normal e a posição de cada vértice
             for(int y = 0; y < this->faces[i][0].size(); y++){
@@ -206,4 +229,11 @@ bool Car::loadObjCar(const char* filename) {
 
 
     return 1;
+}
+
+bool is_number(const std::string& s)
+{
+    std::string::const_iterator it = s.begin();
+    while (it != s.end() && std::isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
 }

@@ -8,21 +8,30 @@
 
 using namespace std;
 
+bool is_number(const std::string& s);
+
 class Car{
 public:
-    Car(Point3D pos, Vector3D dir);
     Point3D position; 
     vector<Point3D> vertices;
     vector<Point3D> vetor_textura;
     vector<Vector3D> normals;
     vector<vector<vector<int> > > faces;
     Vector3D direction;
+    Vector3D upVector;
+    Vector3D sideVector;
+
+    Car();
+
+    void setPosition(float x, float y, float z);
+
+    void setUpVector(float x, float y, float z);
+
+    void setDirection(float x, float y, float z);
 
     void drawCar();
 
     bool loadObjCar(const char* filename);
-
-    bool is_number(const std::string& s);
 };
 
 #endif

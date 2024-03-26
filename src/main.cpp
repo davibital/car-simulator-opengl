@@ -14,7 +14,7 @@ int terrainWidth, terrainLength;
 int maxTerrainHeight;
 
 Camera camera;
-Car car(Point3D(0, 0, 0), Vector3D(0.707, 0.707, 0));
+Car car;
 
 void init();
 void display();
@@ -65,8 +65,10 @@ void init()
     camera.setUpVector(0.0, 0.0, 0.1);
     camera.setTarget(0, 0, 0);
 
-    car.direction.normalize();
     car.loadObjCar("../obj/car.obj");
+    car.setPosition(1, 1, matrix[1][1] + 0.3);
+    car.setUpVector(0, 0, 1);
+    car.setDirection(0.707, 0.707, 0);
 }
 
 void display()
