@@ -115,11 +115,20 @@ void Camera::thirdCarView(Car car)
 
     position = car.position + (viewVector * 4);
     target = car.position + (car.direction * 2);
+
+    direction = Vector3D(target.x - position.x, target.y - position.y, target.z - position.z);
+    direction.normalize();
+
+    upVector = car.sideVector ^ direction;
+    upVector.normalize();
+
+    sideVector = direction ^ upVector;
+    sideVector.normalize();
 }
 
 void Camera::update()
 {
-    // target = position + direction;
+    target = position + direction;
 
     gluLookAt(position.x, position.y, position.z, target.x, target.y, target.z, upVector.x, upVector.y, upVector.z);
 }
