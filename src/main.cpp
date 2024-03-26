@@ -5,6 +5,7 @@
 
 #include "terrain/terrainData.cpp"
 #include "../headers/Camera.hpp"
+#include "../headers/objects/Car.hpp"
 
 using namespace std;
 
@@ -13,6 +14,7 @@ int terrainWidth, terrainLength;
 int maxTerrainHeight;
 
 Camera camera;
+Car car(Point3D(0, 0, 0), Vector3D(0.707, 0.707, 0));
 
 void init();
 void display();
@@ -62,6 +64,9 @@ void init()
     camera.setPosition(terrainWidth, terrainLength, maxTerrainHeight * 1.2);
     camera.setUpVector(0.0, 0.0, 0.1);
     camera.setTarget(0, 0, 0);
+
+    car.direction.normalize();
+    car.loadObjCar("../obj/car.obj");
 }
 
 void display()
@@ -88,6 +93,8 @@ void display()
     glEnd();
 
     drawTerrainMesh();
+
+    car.drawCar();
 
     glutSwapBuffers();
 }
